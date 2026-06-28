@@ -17,7 +17,7 @@
 
             <div id="message" class="alert" style="display: none;"></div>
 
-            <form method="post" action="proses.php">
+            <form>
                 <div class="field-group">
                     <label for="nama">Nama Lengkap</label>
                     <input type="text" id="nama" name="nama" required>
@@ -65,15 +65,43 @@
     </div>
 
     <script>
+        const form = document.querySelector('form');
+        const messageDiv = document.getElementById('message');
+
+        function showMessage(text, type = 'success') {
+            messageDiv.textContent = text;
+            messageDiv.className = `alert alert-${type}`;
+            messageDiv.style.display = 'block';
+        }
+
         const params = new URLSearchParams(window.location.search);
         const status = params.get('status');
         const message = params.get('message');
         if (message) {
-            const messageDiv = document.getElementById('message');
-            messageDiv.textContent = decodeURIComponent(message);
-            messageDiv.classList.add(status === 'success' ? 'alert-success' : 'alert-error');
-            messageDiv.style.display = 'block';
+            showMessage(decodeURIComponent(message), status === 'success' ? 'success' : 'error');
         }
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            if (!data.nama || !data.email || !data.telepon || !data.alamat || !data.pengalaman || !data.pendidikan) {
+                showMessage('Mohon isi semua kolom sebelum mengirimkan formulir.', 'error');
+                return;
+            }
+
+            const submissions = JSON.parse(localStorage.getItem('lamaranKerja') || '[]');
+            submissions.push({
+                ...data,
+                submittedAt: new Date().toISOString()
+            });
+            localStorage.setItem('lamaranKerja', JSON.stringify(submissions));
+
+            form.reset();
+            showMessage(`Terima kasih, ${data.nama}. Data Anda berhasil diterima.`, 'success');
+        });
     </script>
 </body>
 </html>
