@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Penerimaan Kerja</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="page">
+        <div class="card">
+            <div class="hero">
+                <span class="badge">Lowongan Terbuka</span>
+                <h1>Form Penerimaan Kerja</h1>
+                <p>Silakan isi data diri Anda dengan lengkap untuk mendaftar pekerjaan.</p>
+            </div>
+
+            <div id="message" class="alert" style="display: none;"></div>
+
+            <form method="post" action="proses.php">
+                <div class="field-group">
+                    <label for="nama">Nama Lengkap</label>
+                    <input type="text" id="nama" name="nama" required>
+                </div>
+
+                <div class="field-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="field-group">
+                    <label for="telepon">Nomor Telepon</label>
+                    <input type="tel" id="telepon" name="telepon" required>
+                </div>
+
+                <div class="field-group">
+                    <label for="alamat">Alamat</label>
+                    <textarea id="alamat" name="alamat" rows="3" required></textarea>
+                </div>
+
+                <div class="field-group">
+                    <label for="pengalaman">Pengalaman Kerja</label>
+                    <select id="pengalaman" name="pengalaman" required>
+                        <option value="">-- Pilih --</option>
+                        <option value="Tidak ada">Tidak ada</option>
+                        <option value="1-2 tahun">1-2 tahun</option>
+                        <option value="3-5 tahun">3-5 tahun</option>
+                        <option value="5+ tahun">5+ tahun</option>
+                    </select>
+                </div>
+
+                <div class="field-group">
+                    <label for="pendidikan">Pendidikan Terakhir</label>
+                    <select id="pendidikan" name="pendidikan" required>
+                        <option value="">-- Pilih --</option>
+                        <option value="SMA/SMK">SMA/SMK</option>
+                        <option value="S1">S1</option>
+                        <option value="S2">S2</option>
+                    </select>
+                </div>
+
+                <button type="submit">Kirim Lamaran</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const status = params.get('status');
+        const message = params.get('message');
+        if (message) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = decodeURIComponent(message);
+            messageDiv.classList.add(status === 'success' ? 'alert-success' : 'alert-error');
+            messageDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
